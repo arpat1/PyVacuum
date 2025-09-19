@@ -15,4 +15,18 @@ config = {
 
 for key, value in config.items():
     if not value:
-        raise ValueError(f"Empty value for {key}")
+        raise ValueError(f"Empty value for {key}")    
+
+is_ext_html_list = [p.split(".")[-1] == "html" for p in [config["PATH_TO_DEV_HTML"], config["PATH_TO_PROD_HTML"]]]
+
+if sum(is_ext_html_list) != 2:
+    if config["PATH_TO_DEV_HTML"].split(".") != "html":
+        raise FileNotFoundError("Incorrect extension for PATH_TO_DEV_HTML")
+    raise FileNotFoundError("Incorrect extension for PATH_TO_PROD_HTML!")
+
+htmls_exists = os.path.exists(config["PATH_TO_DEV_HTML"]) and os.path.exists(config["PATH_TO_PROD_HTML"])
+
+if not htmls_exists:
+    if not os.path.exists(config["PATH_TO_DEV_HTML"]):
+        raise FileNotFoundError("Incorrect path for PATH_TO_DEV_HTML!")
+    raise FileNotFoundError("Incorrect path for PATH_TO_PROD_HTML!")
