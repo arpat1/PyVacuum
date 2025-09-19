@@ -2,6 +2,9 @@ import os
 from dotenv import load_dotenv
 
 
+if not os.path.exists("bueeld.config.env"):
+    raise FileNotFoundError("bueeld.config.env not finded")
+
 load_dotenv(dotenv_path="bueeld.config.env")
 
 config = {
