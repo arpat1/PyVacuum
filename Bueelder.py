@@ -1,5 +1,6 @@
 import argparse
 import os
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 
@@ -42,7 +43,7 @@ parser_run.add_argument("option", choices=["dev", "build"], help="dev - running 
 args = parser.parse_args()
 
 if args.command == "run":
-    if args.option == "dev":
-        print("Running on dev mode")
-    elif args.option == "build":
-        print("Running build")
+    for value in [config["PATH_TO_DEV_HTML"], config["PATH_TO_PROD_HTML"]]:
+        with open(value, encoding="utf-8") as file:
+            soup = BeautifulSoup(file, "lxml")
+            print(soup.head)
