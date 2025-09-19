@@ -1,3 +1,4 @@
+import argparse
 import os
 from dotenv import load_dotenv
 
@@ -30,3 +31,18 @@ if not htmls_exists:
     if not os.path.exists(config["PATH_TO_DEV_HTML"]):
         raise FileNotFoundError("Incorrect path for PATH_TO_DEV_HTML!")
     raise FileNotFoundError("Incorrect path for PATH_TO_PROD_HTML!")
+
+parser = argparse.ArgumentParser(description="Preparing files and run eel app",)
+
+subparser = parser.add_subparsers(dest="command")
+
+parser_run = subparser.add_parser("run", help="run the app")
+parser_run.add_argument("option", choices=["dev", "build"], help="dev - running app by using dev sources, build - running app by using build res")
+
+args = parser.parse_args()
+
+if args.command == "run":
+    if args.option == "dev":
+        print("Running on dev mode")
+    elif args.option == "build":
+        print("Running build")
