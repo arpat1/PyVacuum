@@ -46,4 +46,22 @@ args = parser.parse_args()
 if args.command == "run":
     with open(config["PATH_TO_DEV_HTML"], encoding="utf-8") as file:
             soup = BeautifulSoup(file, "lxml")
-            scripts = soup.find("script", src=re.compile(".*/eel.js$"))
+
+            localhost_eel = f"http://localhost:{config['PORT']}/eel.js"
+            static_eel = "/eel.js"
+            arg_url_kv = {
+                "dev": localhost_eel,
+                "build": static_eel
+            }
+
+            script = soup.find("script", src=re.compile(".*/eel.js$"))
+
+            if script:
+                src = script["src"]
+                if src == static_eel or src == localhost_eel:
+                    if args.option in arg_url_kv:
+                        url_type_arg = {v:k for k, v in arg_url_kv.items()}[src]
+
+                        if url_type_arg != args.option:
+                            script["src"] = arg_url_kv[args.option]
+                            print(soup)
