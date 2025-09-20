@@ -1,5 +1,6 @@
 import argparse
 import os
+import re
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
@@ -43,7 +44,6 @@ parser_run.add_argument("option", choices=["dev", "build"], help="dev - running 
 args = parser.parse_args()
 
 if args.command == "run":
-    for value in [config["PATH_TO_DEV_HTML"], config["PATH_TO_PROD_HTML"]]:
-        with open(value, encoding="utf-8") as file:
+    with open(config["PATH_TO_DEV_HTML"], encoding="utf-8") as file:
             soup = BeautifulSoup(file, "lxml")
-            print(soup.head)
+            scripts = soup.find("script", src=re.compile(".*/eel.js$"))
