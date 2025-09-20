@@ -94,3 +94,11 @@ if args.command == "run":
 
                             with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
                                 file.writelines(lines)
+            else:
+                eel_script = soup.new_tag("script", src=arg_url_kv[args.option], defer="")
+                str_eel_script = " " * spaces_count + str(eel_script) + "\n"
+
+                lines.insert(head_close_line_index, str(str_eel_script))
+
+                with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
+                    file.writelines(lines)
