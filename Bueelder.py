@@ -1,5 +1,6 @@
 import argparse
 import enum
+from genericpath import exists
 import os
 import re
 from bs4 import BeautifulSoup
@@ -36,6 +37,13 @@ if not htmls_exists:
     if not os.path.exists(config["PATH_TO_DEV_HTML"]):
         raise FileNotFoundError("Incorrect path for PATH_TO_DEV_HTML!")
     raise FileNotFoundError("Incorrect path for PATH_TO_PROD_HTML!")
+
+app_exist = os.path.exists(config["PATH_TO_APP"]) and os.path.exists(config["PATH_TO_APP_ENV"])
+
+if not app_exist:
+    if not os.path.exists(config["PATH_TO_APP"]):
+        raise FileNotFoundError("Incorrect path for PATH_TO_APP!")
+    raise FileNotFoundError("Incorrect path for PATH_TO_APP_ENV!")
 
 parser = argparse.ArgumentParser(description="Preparing files and run eel app",)
 
