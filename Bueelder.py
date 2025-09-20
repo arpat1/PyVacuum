@@ -1,4 +1,5 @@
 import argparse
+import enum
 import os
 import re
 from bs4 import BeautifulSoup
@@ -56,6 +57,29 @@ if args.command == "run":
 
             script = soup.find("script", src=re.compile(".*/eel.js$"))
 
+            script_line_index: int
+            head_close_line_index: int
+
+            lines: list
+
+            with open(config["PATH_TO_DEV_HTML"], encoding="utf-8") as file:
+                lines = file.readlines()
+                for index, line in enumerate(lines):
+                    if script:
+                        if "/eel.js" in line:
+                            script_line_index = index
+                            # print(index)
+                    if "</head>" in line:
+                        head_close_line_index = index
+                        # print(index)
+            
+            spaces_count = 0
+            for s in lines[head_close_line_index-2]:
+                if s == " ":
+                    spaces_count += 1
+                    continue
+                break
+
             if script:
                 src = script["src"]
                 if src == static_eel or src == localhost_eel:
@@ -64,4 +88,9 @@ if args.command == "run":
 
                         if url_type_arg != args.option:
                             script["src"] = arg_url_kv[args.option]
-                            print(soup)
+                            lines[script_line_index] = " " * spaces_count + str(script) + "\n"
+
+                            print(spaces_count)
+
+                            with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
+                                file.writelines(lines)
