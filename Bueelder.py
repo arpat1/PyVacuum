@@ -15,13 +15,25 @@ config = {
     "PATH_TO_PROD_HTML": os.getenv("PATH_TO_PROD_HTML"),
     "PATH_TO_APP": os.getenv("PATH_TO_APP"),
     "PATH_TO_APP_ENV": os.getenv("PATH_TO_APP_ENV"),
-    "CORE_PORT": os.getenv("CORE_PORT"),
-    "VIEW_PORT": os.getenv("VIEW_PORT")
+    "#CORE_PORT": [os.getenv("CORE_PORT"), 8000],
+    "#VIEW_PORT": [os.getenv("VIEW_PORT"), 5173]
 }
 
-for key, value in config.items():
+def unpack_unrequired_kv(key: str):
+    clear_key = key.split("#")[1]
+    value = config[key]
+    if type(value) is list and value[1]:
+        del config[key]
+        config[clear_key] = value[0] if value[0] else value[1]
+    else:
+        raise ValueError(f"Empty default value for unrequired key: {key}")
+
+for key, value in config.copy().items():
     if not value:
         raise ValueError(f"Empty value for {key}")
+    
+    if key.startswith("#"):
+        unpack_unrequired_kv(key)
 
 is_ext_html_list = [p.split(".")[-1] == "html" for p in [config["PATH_TO_DEV_HTML"], config["PATH_TO_PROD_HTML"]]]
 
