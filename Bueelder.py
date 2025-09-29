@@ -1,6 +1,4 @@
 import argparse
-import enum
-from genericpath import exists
 import os
 import re
 from bs4 import BeautifulSoup
@@ -23,7 +21,7 @@ config = {
 
 for key, value in config.items():
     if not value:
-        raise ValueError(f"Empty value for {key}")    
+        raise ValueError(f"Empty value for {key}")
 
 is_ext_html_list = [p.split(".")[-1] == "html" for p in [config["PATH_TO_DEV_HTML"], config["PATH_TO_PROD_HTML"]]]
 
@@ -46,7 +44,7 @@ if not app_exist:
         raise FileNotFoundError("Incorrect path for PATH_TO_APP!")
     raise FileNotFoundError("Incorrect path for PATH_TO_APP_ENV!")
 
-parser = argparse.ArgumentParser(description="Preparing files and run eel app",)
+parser = argparse.ArgumentParser(description="Preparing files and run eel app")
 
 subparser = parser.add_subparsers(dest="command")
 
