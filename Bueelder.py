@@ -16,7 +16,10 @@ config = {
     "PATH_TO_APP": os.getenv("PATH_TO_APP"),
     "PATH_TO_APP_ENV": os.getenv("PATH_TO_APP_ENV"),
     "#CORE_PORT": [os.getenv("CORE_PORT"), 8000],
-    "#VIEW_PORT": [os.getenv("VIEW_PORT"), 5173]
+    "#VIEW_PORT": [os.getenv("VIEW_PORT"), 5173],
+    "#PM": [os.getenv("PM"), "pnpm"],
+    "#RUN_DEV_COMMAND": [os.getenv("RUN_DEV_COMMAND"), "run dev"],
+    "#RUN_BUILD_COMMAND": [os.getenv("RUN_BUILD_COMMAND"), "run build"],
 }
 
 def unpack_unrequired_kv(key: str):
