@@ -17,7 +17,8 @@ config = {
     "PATH_TO_PROD_HTML": os.getenv("PATH_TO_PROD_HTML"),
     "PATH_TO_APP": os.getenv("PATH_TO_APP"),
     "PATH_TO_APP_ENV": os.getenv("PATH_TO_APP_ENV"),
-    "PORT": int(os.getenv("PORT"))
+    "CORE_PORT": os.getenv("CORE_PORT"),
+    "VIEW_PORT": os.getenv("VIEW_PORT")
 }
 
 for key, value in config.items():
@@ -58,7 +59,7 @@ if args.command == "run":
     with open(config["PATH_TO_DEV_HTML"], encoding="utf-8") as file:
             soup = BeautifulSoup(file, "lxml")
 
-            localhost_eel = f"http://localhost:{config['PORT']}/eel.js"
+            localhost_eel = f"http://localhost:{config['CORE_PORT']}/eel.js"
             static_eel = "/eel.js"
             arg_url_kv = {
                 "dev": localhost_eel,
