@@ -1,6 +1,7 @@
 import argparse
 import os
 import re
+import subprocess
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
@@ -126,3 +127,16 @@ if args.command == "run":
 
             with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
                 file.writelines(lines)
+
+    def run_command(command):
+        p = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            text=True,
+            shell=True,
+        )
+
+        return p.communicate()
+    
+    out, err = run_command("")
+    print(out, err)
