@@ -70,59 +70,59 @@ args = parser.parse_args()
 
 if args.command == "run":
     with open(config["PATH_TO_DEV_HTML"], encoding="utf-8") as file:
-            soup = BeautifulSoup(file, "lxml")
+        soup = BeautifulSoup(file, "lxml")
 
-            localhost_eel = f"http://localhost:{config['CORE_PORT']}/eel.js"
-            static_eel = "/eel.js"
-            arg_url_kv = {
-                "dev": localhost_eel,
-                "build": static_eel
-            }
+        localhost_eel = f"http://localhost:{config['CORE_PORT']}/eel.js"
+        static_eel = "/eel.js"
+        arg_url_kv = {
+            "dev": localhost_eel,
+            "build": static_eel
+        }
 
-            script = soup.find("script", src=re.compile(".*/eel.js$"))
+        script = soup.find("script", src=re.compile(".*/eel.js$"))
 
-            script_line_index: int
-            head_close_line_index: int
+        script_line_index: int
+        head_close_line_index: int
 
-            lines: list
+        lines: list
 
-            with open(config["PATH_TO_DEV_HTML"], encoding="utf-8") as file:
-                lines = file.readlines()
-                for index, line in enumerate(lines):
-                    if script:
-                        if "/eel.js" in line:
-                            script_line_index = index
-                            # print(index)
-                    if "</head>" in line:
-                        head_close_line_index = index
+        with open(config["PATH_TO_DEV_HTML"], encoding="utf-8") as file:
+            lines = file.readlines()
+            for index, line in enumerate(lines):
+                if script:
+                    if "/eel.js" in line:
+                        script_line_index = index
                         # print(index)
-            
-            spaces_count = 0
-            for s in lines[head_close_line_index-2]:
-                if s == " ":
-                    spaces_count += 1
-                    continue
-                break
+                if "</head>" in line:
+                    head_close_line_index = index
+                    # print(index)
+        
+        spaces_count = 0
+        for s in lines[head_close_line_index-2]:
+            if s == " ":
+                spaces_count += 1
+                continue
+            break
 
-            if script:
-                src = script["src"]
-                if src == static_eel or src == localhost_eel:
-                    if args.option in arg_url_kv:
-                        url_type_arg = {v:k for k, v in arg_url_kv.items()}[src]
+        if script:
+            src = script["src"]
+            if src == static_eel or src == localhost_eel:
+                if args.option in arg_url_kv:
+                    url_type_arg = {v:k for k, v in arg_url_kv.items()}[src]
 
-                        if url_type_arg != args.option:
-                            script["src"] = arg_url_kv[args.option]
-                            lines[script_line_index] = " " * spaces_count + str(script) + "\n"
+                    if url_type_arg != args.option:
+                        script["src"] = arg_url_kv[args.option]
+                        lines[script_line_index] = " " * spaces_count + str(script) + "\n"
 
-                            print(spaces_count)
+                        print(spaces_count)
 
-                            with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
-                                file.writelines(lines)
-            else:
-                eel_script = soup.new_tag("script", src=arg_url_kv[args.option], defer="")
-                str_eel_script = " " * spaces_count + str(eel_script) + "\n"
+                        with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
+                            file.writelines(lines)
+        else:
+            eel_script = soup.new_tag("script", src=arg_url_kv[args.option], defer="")
+            str_eel_script = " " * spaces_count + str(eel_script) + "\n"
 
-                lines.insert(head_close_line_index, str(str_eel_script))
+            lines.insert(head_close_line_index, str(str_eel_script))
 
-                with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
-                    file.writelines(lines)
+            with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
+                file.writelines(lines)
