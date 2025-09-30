@@ -1,5 +1,6 @@
 import argparse
 import os
+import platform
 import re
 import subprocess
 from bs4 import BeautifulSoup
@@ -138,5 +139,6 @@ if args.command == "run":
 
         return p.communicate()
     
-    out, err = run_command("")
-    print(out, err)
+    run_os = platform.system()
+
+    print(run_os)
