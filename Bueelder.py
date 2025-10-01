@@ -164,3 +164,10 @@ if args.command == "run":
             os_interpreter_kv["Darwin"] = os_interpreter_kv["Linux"]
 
             return f"{os_interpreter_kv[os]} {config['PATH_TO_APP']}"
+    
+    if args.option == "build":
+        return_process_status(run_command(get_command("view")))
+        return_process_status(run_command(get_command("core")))
+    elif args.option == "dev":
+        return_process_status(run_command(get_command("core")))
+        return_process_status(run_command(get_command("view")))
