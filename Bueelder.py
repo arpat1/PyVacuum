@@ -139,6 +139,13 @@ if args.command == "run":
 
         return p
     
+    def return_process_status(p: subprocess.Popen[str]):
+        out, err = p.communicate()
+        if p.returncode:
+            raise subprocess.CalledProcessError(p.returncode, p.args, output=out, stderr=err)
+        
+        print(out)
+    
     def get_command(app_side: str):
         os = platform.system()
         if app_side == "view":
