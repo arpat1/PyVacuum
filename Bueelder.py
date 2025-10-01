@@ -154,7 +154,10 @@ if args.command == "run":
                 "build": config["RUN_BUILD_COMMAND"]
             }
             mode = args.option
-            return f"{config["PM"]} {mode_command_kv[mode]}"
+            path_except_html = config["PATH_TO_DEV_HTML"].split("/")[:-1]
+            SRC_FOLDER_PATH = "/".join(path_except_html)
+
+            return f"cd {SRC_FOLDER_PATH} && {config["PM"]} {mode_command_kv[mode]}"
         elif app_side == "core":
             os_interpreter_kv = {
                 "Windows": f"{config['PATH_TO_APP_ENV']}/Scripts/python.exe",
