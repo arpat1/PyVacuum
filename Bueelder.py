@@ -137,7 +137,7 @@ if args.command == "run":
             shell=True,
         )
 
-        return p.communicate()
+        return p
     
     def get_command(app_side: str):
         os = platform.system()
