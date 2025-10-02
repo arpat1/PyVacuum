@@ -3,6 +3,7 @@ import os
 import platform
 import re
 import subprocess
+import threading
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
@@ -130,22 +131,13 @@ if args.command == "run":
                 file.writelines(lines)
 
     def run_command(command):
-        p = subprocess.Popen(
+        subprocess.run(
             command,
-            stdout=subprocess.PIPE,
-            text=True,
             shell=True,
+            check=True,
         )
 
-        return p
-    
-    def return_process_status(p: subprocess.Popen[str]):
-        out, err = p.communicate()
-        if p.returncode:
-            raise subprocess.CalledProcessError(p.returncode, p.args, output=out, stderr=err)
-        
-        print(out)
-    
+
     def get_command(app_side: str):
         os = platform.system()
         if app_side == "view":
@@ -169,8 +161,8 @@ if args.command == "run":
             return f"\"{os_interpreter_kv[os]}\" {config['PATH_TO_APP']}"
     
     if args.option == "build":
-        return_process_status(run_command(get_command("view")))
-        return_process_status(run_command(get_command("core")))
+        run_command(get_command("view"))
+        run_command(get_command("core"))
     elif args.option == "dev":
-        return_process_status(run_command(get_command("core")))
-        return_process_status(run_command(get_command("view")))
+        run_command(get_command("core"))
+        run_command(get_command("view"))
