@@ -160,9 +160,17 @@ if args.command == "run":
 
             return f"\"{os_interpreter_kv[os]}\" {config['PATH_TO_APP']}"
     
+    get_comd_run = lambda app_side: run_command(get_command(app_side))
+
     if args.option == "build":
-        run_command(get_command("view"))
-        run_command(get_command("core"))
+        get_comd_run("view")
+        get_comd_run("core")
     elif args.option == "dev":
-        run_command(get_command("core"))
-        run_command(get_command("view"))
+        core_th = threading.Thread(target=get_comd_run, args=("core",))
+        view_th = threading.Thread(target=get_comd_run, args=("view",))
+
+        core_th.start()
+        view_th.start()
+
+        core_th.join()
+        view_th.join()
