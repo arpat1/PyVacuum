@@ -1,7 +1,9 @@
+import SelectInterpreter from "./pages/SelectInterpreter"
+
 function App() {
   return (
     <>
-      <h1>Vacuum</h1>
+      <SelectInterpreter/>
     </>
   )
 }
