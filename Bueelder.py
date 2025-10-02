@@ -129,6 +129,8 @@ if args.command == "run":
 
             with open(config["PATH_TO_DEV_HTML"], mode="w", encoding="utf-8") as file:
                 file.writelines(lines)
+    
+    os = platform.system()
 
     def run_command(command):
         subprocess.run(
@@ -137,9 +139,33 @@ if args.command == "run":
             check=True,
         )
 
+    def get_env_set_command(app_side="view"):
+        env_var_dict = {
+            "VIEW_PORT": config["VIEW_PORT"],
+            "CORE_PORT": config["CORE_PORT"],
+        }
+
+        mode = args.option
+
+        if app_side == "core":
+            path_except_html = config["PATH_TO_PROD_HTML"].split("/")[:-1]
+            STATIC = "/".join(path_except_html)
+
+            env_var_dict["STATIC"] = STATIC
+
+            if mode == "build":
+                env_var_dict["MODE"] = '{"": "index.html"}'
+            elif mode == "dev":
+                env_var_dict["MODE"] = f'{{"port": {env_var_dict["VIEW_PORT"]}}}'
+        elif app_side == "view" and mode == "build":
+            return ""
+        
+        set_vars_list = [f"set {k}={v} && " if os == "Windows" else f"{k}={v}" for k, v in env_var_dict.items()]
+        set_vars_command = "".join(set_vars_list)
+
+        return set_vars_command
 
     def get_command(app_side: str):
-        os = platform.system()
         if app_side == "view":
             mode_command_kv = {
                 "dev": config["RUN_DEV_COMMAND"],
@@ -149,7 +175,9 @@ if args.command == "run":
             path_except_html = config["PATH_TO_DEV_HTML"].split("/")[:-1]
             SRC_FOLDER_PATH = "/".join(path_except_html)
 
-            return f"cd {SRC_FOLDER_PATH} && {config["PM"]} {mode_command_kv[mode]}"
+            set_vars_command = get_env_set_command()
+
+            return f"cd {SRC_FOLDER_PATH} && {set_vars_command}{config["PM"]} {mode_command_kv[mode]}"
         elif app_side == "core":
             os_interpreter_kv = {
                 "Windows": f"{config['PATH_TO_APP_ENV']}/Scripts/python.exe",
@@ -158,24 +186,7 @@ if args.command == "run":
 
             os_interpreter_kv["Darwin"] = os_interpreter_kv["Linux"]
 
-            path_except_html = config["PATH_TO_PROD_HTML"].split("/")[:-1]
-            STATIC = "/".join(path_except_html)
-
-            env_var_dict = {
-                "STATIC": STATIC,
-                "VIEW_PORT": config["VIEW_PORT"],
-                "CORE_PORT": config["CORE_PORT"],
-            }
-
-            mode = args.option
-
-            if mode == "build":
-                env_var_dict["MODE"] = '{"": "index.html"}'
-            elif mode == "dev":
-                env_var_dict["MODE"] = f'{{"port": {env_var_dict["VIEW_PORT"]}}}'
-            
-            set_vars_list = [f"set {k}={v} && " if os == "Windows" else f"{k}={v}" for k, v in env_var_dict.items()]
-            set_vars_command = "".join(set_vars_list)
+            set_vars_command = get_env_set_command("core")
 
             return f"{set_vars_command}\"{os_interpreter_kv[os]}\" {config['PATH_TO_APP']}"
     
