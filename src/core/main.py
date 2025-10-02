@@ -1,12 +1,14 @@
+import json
+import os
 import eel
 
 
 if __name__ == "__main__":
-    STATIC_FOLDER="src/view/dist"
-    VIEW_PORT=5173
-    CORE_PORT=8000
+    STATIC_FOLDER=os.getenv("STATIC")
+    VIEW_PORT=os.getenv("VIEW_PORT")
+    CORE_PORT=os.getenv("CORE_PORT")
 
-    VIEW_DICT={"": "index.html"} # {"port": VIEW_PORT} for dev
+    VIEW_DICT=json.loads(os.getenv("MODE")) # {"": "index.html"} for build, {"port": VIEW_PORT} for dev
     SIZE=(500, 500)
     POSITION=None
 
