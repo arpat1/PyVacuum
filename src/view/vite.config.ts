@@ -5,9 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    port: Number(process.env.VIEW_PORT),
     proxy: {
       '/eel': {
-          target: 'ws://localhost:8000',
+          target: `ws://localhost:${process.env.CORE_PORT}`,
           ws: true,
           rewriteWsOrigin: true
       },
