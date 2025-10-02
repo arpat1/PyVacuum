@@ -158,7 +158,26 @@ if args.command == "run":
 
             os_interpreter_kv["Darwin"] = os_interpreter_kv["Linux"]
 
-            return f"\"{os_interpreter_kv[os]}\" {config['PATH_TO_APP']}"
+            path_except_html = config["PATH_TO_PROD_HTML"].split("/")[:-1]
+            STATIC = "/".join(path_except_html)
+
+            env_var_dict = {
+                "STATIC": STATIC,
+                "VIEW_PORT": config["VIEW_PORT"],
+                "CORE_PORT": config["CORE_PORT"],
+            }
+
+            mode = args.option
+
+            if mode == "build":
+                env_var_dict["MODE"] = '{"": "index.html"}'
+            elif mode == "dev":
+                env_var_dict["MODE"] = f'{{"port": {env_var_dict["VIEW_PORT"]}}}'
+            
+            set_vars_list = [f"set {k}={v} && " if os == "Windows" else f"{k}={v}" for k, v in env_var_dict.items()]
+            set_vars_command = "".join(set_vars_list)
+
+            return f"{set_vars_command}\"{os_interpreter_kv[os]}\" {config['PATH_TO_APP']}"
     
     get_comd_run = lambda app_side: run_command(get_command(app_side))
 
