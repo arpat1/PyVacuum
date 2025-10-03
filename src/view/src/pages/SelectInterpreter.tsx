@@ -10,6 +10,21 @@ const SelectInterpreter = () => {
         setSelectedFile(e.target.value)
     }
 
+    const selectFiles = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        //call python function to select files
+        createRipples(e)
+    }
+
+    const selectInterpreter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        //call python function to select interpreter
+        createRipples(e)
+    }
+
+    const runInterpreter = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        //call python function to run interpreter
+        createRipples(e)
+    }
+
     const createRipples = (e: React.MouseEvent<HTMLAnchorElement>) => {
         const el = e.currentTarget
         const ripples = document.createElement("span")
@@ -27,10 +42,10 @@ const SelectInterpreter = () => {
     }
     return (
         <div className={styles.container}>
-            <a href="#" className={styles["select-ripple-btn"]} onClick={createRipples}>
+            <a href="#" className={styles["select-ripple-btn"]} onClick={selectFiles}>
                 select files to run
             </a>
-            <a href="#" className={styles["select-ripple-btn"]} onClick={createRipples}>
+            <a href="#" className={styles["select-ripple-btn"]} onClick={selectInterpreter}>
                 select interpreter
             </a>
             <label>choose file:</label>
@@ -45,10 +60,9 @@ const SelectInterpreter = () => {
                 : 
                 <option value="first choose files">first choose files</option>}
             </select>
-            <a href="#" className={styles["select-ripple-btn"]} onClick={createRipples}>
+            <a href="#" className={styles["select-ripple-btn"]} onClick={runInterpreter}>
                 run!
             </a>
-            {selectedFile}
         </div>
     )
 }
