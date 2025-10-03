@@ -53,3 +53,30 @@ span{
         opacity: 0;
     }
 }
+
+.custom-select {
+  background-color: rgb(62, 62, 198);
+  color: #fff;
+  border: none;
+  border-radius: 0%;
+  padding: 5px 5px;
+  align-items: center;
+
+  &, &::picker(select) {
+    appearance: base-select;
+  }
+}
+
+.custom-select::picker-icon{
+    transition: rotate 0.15s;
+    rotate: x 180deg;
+}
+
+.custom-select:focus::picker-icon{
+    transition: rotate 0.15s;
+    rotate: x 0deg;
+}
+
+.custom-select option::checkmark{
+    display: none;
+}
