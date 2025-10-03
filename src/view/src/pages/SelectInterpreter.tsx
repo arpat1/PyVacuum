@@ -4,6 +4,12 @@ import filesvg from "../shared/file_icon.svg"
 
 const SelectInterpreter = () => {
     const [fileNames, setFileNames] = useState(["file1.py", "file2.py", "file3.py"])
+    const [selectedFile, setSelectedFile] = useState("")
+
+    const handleSelectedFileChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedFile(e.target.value)
+    }
+
     const createRipples = (e: React.MouseEvent<HTMLAnchorElement>) => {
         const el = e.currentTarget
         const ripples = document.createElement("span")
@@ -28,7 +34,7 @@ const SelectInterpreter = () => {
                 select interpreter
             </a>
             <label>choose file:</label>
-            <select className={styles["custom-select"]}>
+            <select className={styles["custom-select"]} onChange={handleSelectedFileChange}>
                 {fileNames.length ? 
                 fileNames.map((fileName) => 
                 <option value={fileName} key={fileName}>
@@ -42,6 +48,7 @@ const SelectInterpreter = () => {
             <a href="#" className={styles["select-ripple-btn"]} onClick={createRipples}>
                 run!
             </a>
+            {selectedFile}
         </div>
     )
 }
