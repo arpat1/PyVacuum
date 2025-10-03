@@ -65,6 +65,8 @@ span{
 
   &, &::picker(select) {
     appearance: base-select;
+    overflow-y: auto;
+    max-height: 100px;
   }
 }
 
