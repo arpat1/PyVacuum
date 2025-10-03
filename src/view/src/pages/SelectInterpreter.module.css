@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Rubik", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.select-ripple-btn {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    overflow: hidden;
+    color: white;
+    background-color: rgb(62, 62, 198);
+}
+
+span{
+    content: "";
+    position: absolute;
+    background-color: #fff;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple-anim 0.5s linear;
+}
+
+@keyframes ripple-anim {
+    0% {
+        width: 0px;
+        height: 0px;
+        opacity: 1;
+    }
+    100% {
+        width: 200px;
+        height: 200px;
+        opacity: 0;
+    }
+}
