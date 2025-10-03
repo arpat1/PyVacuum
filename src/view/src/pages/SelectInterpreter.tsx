@@ -22,12 +22,12 @@ const SelectInterpreter = () => {
     return (
         <div className={styles.container}>
             <a href="#" className={styles["select-ripple-btn"]} onClick={createRipples}>
-                Select files to run
+                select files to run
             </a>
             <a href="#" className={styles["select-ripple-btn"]} onClick={createRipples}>
-                Select interpreter
+                select interpreter
             </a>
-            <label>Choose file:</label>
+            <label>choose file:</label>
             <select className={styles["custom-select"]}>
                 {fileNames.length ? 
                 fileNames.map((fileName) => 
@@ -39,6 +39,9 @@ const SelectInterpreter = () => {
                 : 
                 <option value="first choose files">first choose files</option>}
             </select>
+            <a href="#" className={styles["select-ripple-btn"]} onClick={createRipples}>
+                run!
+            </a>
         </div>
     )
 }
