@@ -1,6 +1,7 @@
 import json
 import os
 import eel
+import app
 
 
 if __name__ == "__main__":

@@ -1,27 +1,44 @@
 import React, { useState } from "react"
 import styles from "./SelectInterpreter.module.css"
 import filesvg from "../shared/file_icon.svg"
+import { eel } from "../App"
 
 const SelectInterpreter = () => {
-    const [fileNames, setFileNames] = useState(["file1.py", "file2.py", "file3.py"])
+    const [fileNames, setFileNames] = useState<string[]>([])
     const [selectedFile, setSelectedFile] = useState("")
+    const [selectedInterpreter, setSelectedInterpreter] = useState("")
 
     const handleSelectedFileChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedFile(e.target.value)
+        e.preventDefault()
     }
 
     const selectFiles = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        //call python function to select files
+        eel.select_files()((paths: Array<string>) => {
+            const newFiles = paths
+            .map(p => p.split("/").at(-1))
+            .filter(p => typeof p == "string")
+
+            const newFileNames = [...new Set([...fileNames, ...newFiles])]
+            setFileNames(newFileNames)
+            setSelectedFile(newFileNames[0])
+        })
         createRipples(e)
     }
 
     const selectInterpreter = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        //call python function to select interpreter
+        eel.select_interpreter()((interpreter: string) => setSelectedInterpreter(interpreter))
         createRipples(e)
     }
 
     const runInterpreter = (e: React.MouseEvent<HTMLAnchorElement>) => {
-        //call python function to run interpreter
+        if (selectedInterpreter && selectedFile){
+            eel.run_file(selectedFile)
+        } else if (!selectedInterpreter) {
+            alert("First select interpreter!")
+        } else if (!selectedFile) {
+            alert("First select python file!")
+        }
         createRipples(e)
     }
 
