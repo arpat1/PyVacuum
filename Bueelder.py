@@ -160,7 +160,7 @@ if args.command == "run":
         elif app_side == "view" and mode == "build":
             return ""
         
-        set_vars_list = [f"set {k}={v} && " if os == "Windows" else f"{k}={v}" for k, v in env_var_dict.items()]
+        set_vars_list = [f"set {k}={v} && " if os == "Windows" else f"{k}={v} " for k, v in env_var_dict.items()]
         set_vars_command = "".join(set_vars_list)
 
         return set_vars_command
