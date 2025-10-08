@@ -177,7 +177,7 @@ if args.command == "run":
 
             set_vars_command = get_env_set_command()
 
-            return f"cd {SRC_FOLDER_PATH} && {set_vars_command}{config["PM"]} {mode_command_kv[mode]}"
+            return f"cd {SRC_FOLDER_PATH} && {set_vars_command} {config["PM"]} {mode_command_kv[mode]}"
         elif app_side == "core":
             os_interpreter_kv = {
                 "Windows": f"{config['PATH_TO_APP_ENV']}/Scripts/python.exe",
